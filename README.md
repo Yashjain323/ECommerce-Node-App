@@ -2,6 +2,7 @@
 
 This is a project built using Type Script, Node, Express and MongoDB. 
 For setting up this project in local directory:-
+
     1.  Take pull of this repo in the local
     
     2.  Execute command "npm install"
