@@ -1,4 +1,5 @@
 import productModel from "../models/product.model";
+import { UserService } from "./user.service";
 
 export class ProductService {
   constructor() {}
@@ -12,6 +13,32 @@ export class ProductService {
     const products = await productModel.find({shopId:shopId});
     return products;
   }
+
+  public async getProductsByChildCategoryId(childCategoryId: string) {
+    const products = await productModel.find({childCategoryId:childCategoryId});
+    return products;
+  }
+
+  public async usersLiking(id:string, request: any) {
+    let pro = await productModel.findById(id);
+    if (!pro) {
+      return {
+        error: true,
+        message: "product not found",
+        result: null,
+      };
+    }
+    console.log(request.body.usersLiking);
+    await productModel.findByIdAndUpdate(id,{$push:{usersLiking:request.body.usersLiking}});
+    const service = new UserService();
+    request.body.usersLiking.map(async (userId:any)=>{
+      await service.likedUser(userId,id)
+    })
+    console.log("Followers Added Successfully")
+    return { error: false, message: "Follower Added Successfully" };
+  }
+
+
 
   public async getProductById(id: string) {
     const product = await productModel.findById(id);

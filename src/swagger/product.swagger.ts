@@ -1,12 +1,4 @@
-import {
-  Get,
-  Post,
-  Put,
-  Delete,
-  Route,
-  Tags,
-  Body,
-} from "tsoa";
+import { Get, Post, Put, Delete, Route, Tags, Body } from "tsoa";
 import { ProductService } from "../services/product.service";
 
 interface Response {
@@ -17,13 +9,17 @@ interface Response {
 interface IProduct {
   name: string;
   shopId: string;
-  category: string;
   desc: string;
   price: number;
   discount: number;
+  childCategoryId: string;
   imageURLs: string[];
+  videoUrl: string[];
+  usersLiking:string[];
 }
-
+interface IProductLiking{
+  usersLiking: string[];
+}
 @Route("product")
 @Tags("Product")
 export default class ProductSwagger {
@@ -41,6 +37,23 @@ export default class ProductSwagger {
     return res;
   }
 
+  @Get("/getProductsByChildCategory/:id")
+  public async getProductsByChildCategoryId(id: string): Promise<IProduct[]> {
+    const service = new ProductService();
+    const res = await service.getProductsByChildCategoryId(id);
+    return res;
+  }
+  
+  @Put("/likeProduct/:id")
+  public async usersLiking(
+    id: string,
+    @Body() request: IProductLiking
+  ): Promise<Response> {
+    const service = new ProductService();
+    const res = await service.usersLiking(id, request);
+    return res;
+  }
+
   @Get("/getAllProducts")
   public async getAllProducts(): Promise<IProduct[]> {
     const service = new ProductService();
@@ -49,7 +62,7 @@ export default class ProductSwagger {
   }
 
   @Get("/getAllProductsByShopId/:id")
-  public async getAllProductsByShopId(id:string): Promise<IProduct[]> {
+  public async getAllProductsByShopId(id: string): Promise<IProduct[]> {
     const service = new ProductService();
     const res = await service.getAllProductsByShopId(id);
     return res;

@@ -1,0 +1,11 @@
+import { Schema, model } from "mongoose";
+
+const schema = new Schema({
+  name: { type: String, required: true },
+  subCategoryId: {type: Schema.Types.ObjectId, required: true, ref: "productSubCategory"},
+  createdOn: { type: Number, required: true, default: Date.now },
+  isStatus :{type:Boolean, required:true, default: false},
+  isDeleted: { type: Boolean, required: true, default: false },
+});
+
+export default model("productChildCategory", schema);

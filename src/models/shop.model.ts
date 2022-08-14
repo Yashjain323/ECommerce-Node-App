@@ -14,8 +14,15 @@ const schema = new Schema({
   ratings: { type: Number, required: false },
   address: { type: String, required: true },
   state: { type: String, required: true },
+  usersFollowing:{
+    type:[Schema.Types.ObjectId], required:false 
+  },
   city: { type: String, required: true },
   pincode: { type: Number, required: true },
+  location: {
+    type: {type :String, required: true, default:"Point"},
+    coordinates: [Number]
+  },
   isVerified: { type: Boolean, required: true, default: false },
   isBlocked: { type: Boolean, required: true, default: false },
   createdOn: { type: Number, required: true, default: Date.now },

@@ -1,6 +1,7 @@
 import shopModel from "../models/shop.model";
 import productModel from "../models/product.model"
 import {ProductService} from "./product.service";
+import {UserService} from "./user.service";
 export class ShopService {
   constructor() {}
 
@@ -38,6 +39,25 @@ export class ShopService {
     });
     await shop.save();
     return { error: false, message: "Shop Creation Successful" };
+  }
+
+  public async addFollowers(id:string, request: any) {
+    let shop = await shopModel.findById(id);
+    if (!shop) {
+      return {
+        error: true,
+        message: "Shop not found",
+        result: null,
+      };
+    }
+    console.log(request.body.usersFollowing);
+    await shopModel.findByIdAndUpdate(id,{$push:{usersFollowing:request.body.usersFollowing}});
+    const service = new UserService();
+    request.body.usersFollowing.map(async (userId:any)=>{
+      await service.addUsers(userId,id)
+    })
+    console.log("Followers Added Successfully")
+    return { error: false, message: "Follower Added Successfully" };
   }
 
   // Updates an Address

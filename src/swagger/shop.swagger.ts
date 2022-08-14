@@ -30,9 +30,17 @@ interface IShop {
   address: string;
   state: string;
   city: string;
+  location : { 
+  type: "Point",
+  coordinates: number[]
+}
+  usersFollowing: string[];
   pincode: number;
 }
 
+interface IShopFollowers{
+  usersFollowing: string[];
+}
 @Route("shop")
 @Tags("Shop")
 export default class ShopSwagger {
@@ -68,6 +76,16 @@ export default class ShopSwagger {
   public async getAllBlockedShops(): Promise<IShop[]> {
     const service = new ShopService();
     const res = await service.getAllBlockedShops();
+    return res;
+  }
+
+  @Put("/addFollowers/:id")
+  public async addFollowers(
+    id: string,
+    @Body() request: IShopFollowers
+  ): Promise<Response> {
+    const service = new ShopService();
+    const res = await service.addFollowers(id, request);
     return res;
   }
 

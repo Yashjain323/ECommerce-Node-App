@@ -9,13 +9,14 @@ export default class shopController {
   public initializeRoutes() {
     this.router.get("/getShopById/:id/", this.getShopById);
     this.router.get("/getAllShops/", this.getAllshops);
+    this.router.put("/addFollowers/:id", this.addFollowers);
     this.router.get("/getAllVerifiedShops/", this.getAllVerifiedShops);
     this.router.get("/getAllBlockedShops/", this.getAllBlockedShops);
     this.router.post("/createShop/", this.createshop);
     this.router.put("/updateShop/:id/", this.updateshop);
     this.router.delete("/deleteShop/:id/", this.deleteshop);
-    this.router.put("/changeVerifiedStatus/:id",this.changeVerifiedStatus);
-    this.router.put("/changeBlockedStatus/:id",this.changeBlockedStatus);
+    this.router.put("/changeVerifiedStatus/:id", this.changeVerifiedStatus);
+    this.router.put("/changeBlockedStatus/:id", this.changeBlockedStatus);
   }
 
   public async getAllshops(req: any, res: express.Response) {
@@ -96,6 +97,23 @@ export default class shopController {
       res.status(200).json(response);
     } catch (err) {
       console.log({ message: "Updating shop Operation Failed.", err });
+      res.status(500).json(err);
+    }
+  }
+
+  public async addFollowers(req: any, res: express.Response) {
+    try {
+      let id = req.params.id;
+      if (!id) {
+        console.log({ message: "Request Parameter ID not found." });
+      } else {
+        console.log({ message: "Adding Followers:" + id });
+      }
+      const swagger = new ShopSwagger();
+      const response = await swagger.addFollowers(id, req);
+      res.status(200).json(response);
+    } catch (err) {
+      console.log({ message: "Adding Followers Operation Failed", err });
       res.status(500).json(err);
     }
   }
