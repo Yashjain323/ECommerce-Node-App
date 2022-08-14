@@ -11,7 +11,7 @@ req.headers({
 req.form({
   "route" : "v3",
   "sender_id" : "FTWSMS",
-  "message" : `Your verification OTP for Litchies SignUP is: \n ${otp}`,
+  "message" : `Your verification OTP for SignUP is: \n ${otp}`,
     "numbers": mobile
 });
 
