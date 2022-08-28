@@ -2,7 +2,8 @@ import { Schema, model } from "mongoose";
 
 // 1. Create a Schema corresponding to the document interface.
 const schema = new Schema({
-  shopId: { type: Schema.Types.ObjectId, required: true },
+  shopIds: { type: [Schema.Types.ObjectId], required: true },
+  offerProducts :{ type:[{}],required:true } ,
   shopBanner: { type: String, required: true }
 });
 

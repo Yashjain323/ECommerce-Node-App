@@ -10,6 +10,7 @@ export default class shopController {
     this.router.get("/getShopById/:id/", this.getShopById);
     this.router.get("/getAllShops/", this.getAllshops);
     this.router.put("/addFollowers/:id", this.addFollowers);
+    this.router.put("/removeFollowers/:id", this.removeFollowers);
     this.router.get("/getAllVerifiedShops/", this.getAllVerifiedShops);
     this.router.get("/getAllBlockedShops/", this.getAllBlockedShops);
     this.router.post("/createShop/", this.createshop);
@@ -117,6 +118,25 @@ export default class shopController {
       res.status(500).json(err);
     }
   }
+
+  public async removeFollowers(req: any, res: express.Response) {
+    try {
+      let id = req.params.id;
+      if (!id) {
+        console.log({ message: "Request Parameter ID not found." });
+      } else {
+        console.log({ message: "Removing Followers:" + id });
+      }
+      const swagger = new ShopSwagger();
+      const response = await swagger.removeFollowers(id, req);
+      res.status(200).json(response);
+    } catch (err) {
+      console.log({ message: "Removing Followers Operation Failed", err });
+      res.status(500).json(err);
+    }
+  }
+
+
 
   public async deleteshop(req: any, res: express.Response) {
     try {

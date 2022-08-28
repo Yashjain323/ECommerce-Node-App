@@ -7,7 +7,7 @@ interface Response {
 }
 
 interface IBanner {
-  shopId: string;
+  shopIds: string[];
   shopBanner: string;
 }
 

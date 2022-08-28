@@ -36,13 +36,13 @@ export class UserService {
       return {error:true,message:"Phone No. Already Exists"};
     }
     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets:false })
-    await message(request.body.mobile,otp);
+    await message(request.body.mobile,otp,false);
     return { error: false, message: "OTP sent successfully", otp:otp };
   }
 
   public async createForgotOtp(request:any) {
     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets:false })
-    await message(request.body.mobile,otp);
+    await message(request.body.mobile,otp,true);
     return { error: false, message: "OTP sent successfully", otp:otp };
   }
 
@@ -93,6 +93,21 @@ export class UserService {
     console.log({ message: "Shop Added to Followed List" });
     return { error: false, message: "Shop Added to Followed List" };
   }
+
+  public async removeUsers(id: string, shopId: any) {
+    let user = await userModel.findById(id);
+    if (!user) {
+      return {
+        error: true,
+        message: "User not found",
+        result: null,
+      };
+    }
+    await userModel.findByIdAndUpdate(id,{$pull:{followedShops:shopId}});
+    console.log({ message: "Shop Removed Followed List" });
+    return { error: false, message: "Shop Removed Followed List" };
+  }
+
   public async likedUser(id: string, productId: any) {
     let user = await userModel.findById(id);
     if (!user) {
@@ -105,6 +120,20 @@ export class UserService {
     await userModel.findByIdAndUpdate(id,{$push:{likedProducts:productId}});
     console.log({ message: "Product Added to Liked Product List" });
     return { error: false, message: "Product Added to Liked Product List" };
+  }
+
+  public async unLikedUser(id: string, productId: any) {
+    let user = await userModel.findById(id);
+    if (!user) {
+      return {
+        error: true,
+        message: "User not found",
+        result: null,
+      };
+    }
+    await userModel.findByIdAndUpdate(id,{$pull:{likedProducts:productId}});
+    console.log({ message: "Product removed from Liked Product List" });
+    return { error: false, message: "Product removed from Liked Product List" };
   }
 
 

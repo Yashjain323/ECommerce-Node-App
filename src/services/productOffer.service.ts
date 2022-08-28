@@ -12,6 +12,16 @@ export class ProductOfferService {
     const productOffer = await proOfferModel.find({shopId:shopId});
     return productOffer;
   }
+ 
+  public async getAllProductOffersByShopIds(shopIds: []) {
+    var productOffers:any= [];
+    let product;
+    await Promise.all(shopIds.map(async(shopId)=>{
+      product = await proOfferModel.findOne({shopId:shopId});
+      productOffers.push(product);
+    }))
+    return productOffers;
+  }
 
   public async getProductOfferById(id: string) {
     const productOffer = await proOfferModel.findById(id);

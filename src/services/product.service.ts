@@ -1,5 +1,6 @@
 import productModel from "../models/product.model";
 import { UserService } from "./user.service";
+import { ShopService } from "./shop.service";
 
 export class ProductService {
   constructor() {}
@@ -29,15 +30,40 @@ export class ProductService {
       };
     }
     console.log(request.body.usersLiking);
+    const shopService = new ShopService();
+    const userService =new UserService();
+    const shop = await shopService.getShopById(pro.shopId)
+    const user = await userService.getUserById(request.body.usersLiking[0]);
+    const payload = {
+      "GCM":`{ \"notification\": { \"body\": \"${user.firstName} ${user.lastName} has liked the ${pro.name} of your shop\", \"title\":\"Your Product Has Been Liked\" } }`
+    };
+    await ShopService.publish(shop.snsEndpoint,payload)
     await productModel.findByIdAndUpdate(id,{$push:{usersLiking:request.body.usersLiking}});
-    const service = new UserService();
     request.body.usersLiking.map(async (userId:any)=>{
-      await service.likedUser(userId,id)
+      await userService.likedUser(userId,id)
     })
-    console.log("Followers Added Successfully")
-    return { error: false, message: "Follower Added Successfully" };
+    console.log("Product Liked Successfully")
+    return { error: false, message: "Product Liked Successfully" };
   }
 
+  public async usersUnLiking(id:string, request: any) {
+    let pro = await productModel.findById(id);
+    if (!pro) {
+      return {
+        error: true,
+        message: "product not found",
+        result: null,
+      };
+    }
+    console.log(request.body.usersLiking);
+    await productModel.findByIdAndUpdate(id,{$pull:{usersLiking:{$in: request.body.usersLiking}}});
+    const service = new UserService();
+    request.body.usersLiking.map(async (userId:any)=>{
+      await service.unLikedUser(userId,id)
+    })
+    console.log("Product Unliked Successfully")
+    return { error: false, message: "Product Unliked Successfully" };
+  }
 
 
   public async getProductById(id: string) {

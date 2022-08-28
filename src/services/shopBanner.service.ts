@@ -1,4 +1,5 @@
 import BannerModel from "../models/shopBanner.model";
+import { ProductOfferService } from "./productOffer.service";
 
 export class BannerService {
   constructor() {}
@@ -27,8 +28,12 @@ export class BannerService {
 
   // Creates an Address.
   public async createBanner(request: any) {
+    const service = new ProductOfferService();
+    const offerProducts = await service.getAllProductOffersByShopIds(request.body.shopIds);
     const Banner = new BannerModel({
-      ...request.body,
+      shopIds: request.body.shopIds,
+      offerProducts : offerProducts,
+      shopBanner: request.body.shopBanner
     });
     await Banner.save();
     return { error: false, message: "Shop Banner Creation Successful" };

@@ -25,6 +25,7 @@ const schema = new Schema({
   },
   isVerified: { type: Boolean, required: true, default: false },
   isBlocked: { type: Boolean, required: true, default: false },
+  snsEndpoint: {type:String, required:false},
   createdOn: { type: Number, required: true, default: Date.now },
   isDeleted: { type: Boolean, required: true, default: false },
 });

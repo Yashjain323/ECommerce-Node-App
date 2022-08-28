@@ -1,5 +1,4 @@
 /node_modules
 /dest
-/public/
+/public
 /.env
-/images

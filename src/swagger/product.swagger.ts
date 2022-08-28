@@ -15,7 +15,6 @@ interface IProduct {
   childCategoryId: string;
   imageURLs: string[];
   videoUrl: string[];
-  usersLiking:string[];
 }
 interface IProductLiking{
   usersLiking: string[];
@@ -51,6 +50,16 @@ export default class ProductSwagger {
   ): Promise<Response> {
     const service = new ProductService();
     const res = await service.usersLiking(id, request);
+    return res;
+  }
+
+  @Put("/unLikeProduct/:id")
+  public async usersUnLiking(
+    id: string,
+    @Body() request: IProductLiking
+  ): Promise<Response> {
+    const service = new ProductService();
+    const res = await service.usersUnLiking(id, request);
     return res;
   }
 

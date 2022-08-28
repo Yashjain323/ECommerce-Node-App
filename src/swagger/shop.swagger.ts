@@ -89,6 +89,16 @@ export default class ShopSwagger {
     return res;
   }
 
+  @Put("/removeFollowers/:id")
+  public async removeFollowers(
+    id: string,
+    @Body() request: IShopFollowers
+  ): Promise<Response> {
+    const service = new ShopService();
+    const res = await service.removeFollowers(id, request);
+    return res;
+  }
+
   @Put("/updateShop/:id")
   public async updateShop(
     id: string,

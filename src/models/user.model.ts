@@ -5,16 +5,17 @@ const schema = new Schema({
   lastName: { type: String, required: true },
   gender: { type: String, required: true },
   dob: { type: Date, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: false },
   imageUrl:{type:String, required:false},
   mobile: { type: Number, required: true },
   followedShops:{
     type:[Schema.Types.ObjectId], required:false 
   },
-  likedProducts:{
+    likedProducts:{
     type:[Schema.Types.ObjectId], required:false 
   },
   password: { type: String, required: true },
+  snsEndpoint:{type:String, required:false, default:""},
   isDeleted: { type: Boolean, required: true, default: false },
 });
 

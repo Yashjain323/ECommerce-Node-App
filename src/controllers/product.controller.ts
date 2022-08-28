@@ -10,6 +10,7 @@ export default class ProductController {
     this.router.get("/getProduct/:id/", this.getProductById);
     this.router.get("/getAllProducts/", this.getAllProducts);
     this.router.put("/likeProduct/:id", this.usersLiking);
+    this.router.put("/unLikeProduct/:id", this.usersUnLiking);
     this.router.get("/getAllProductsByShopId/:id", this.getAllProductsByShopId);
     this.router.get("/getProductsByChildCategory/:id",this.getProductsByChildCategoryId);
     this.router.post("/createProduct/", this.createProduct);
@@ -30,6 +31,23 @@ export default class ProductController {
       res.status(200).json(response);
     } catch (err) {
       console.log({ message: "Adding Followers Operation Failed", err });
+      res.status(500).json(err);
+    }
+  }
+
+  public async usersUnLiking(req: any, res: express.Response) {
+    try {
+      let id = req.params.id;
+      if (!id) {
+        console.log({ message: "Request Parameter ID not found." });
+      } else {
+        console.log({ message: "Removing Followers:" + id });
+      }
+      const swagger = new ProductSwagger();
+      const response = await swagger.usersUnLiking(id, req);
+      res.status(200).json(response);
+    } catch (err) {
+      console.log({ message: "Removing Followers Operation Failed", err });
       res.status(500).json(err);
     }
   }
